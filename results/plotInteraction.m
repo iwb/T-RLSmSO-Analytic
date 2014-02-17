@@ -12,7 +12,7 @@ completeData{3} = xlsread('fminSummary.xlsx', '100Osci', 'B2:F28');
 
 %% Figure
 % choose data
-n = 3;
+n = 2;
 
 % discretisation of all y-axes
 ylimdisc = 5;

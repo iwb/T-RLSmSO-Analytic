@@ -2,7 +2,7 @@ close all
 % Gegebenenfalls pool schließen
 poolobj = gcp('nocreate');
 if ~isempty(poolobj)
-    matlabpool close
+    poolobj.delete
 end
 
 % Pfade hinzufügen
@@ -10,7 +10,7 @@ addpath('.\Klassen');
 addpath('.\TopLevelFunctions');
 
 % Auswahl des Clusters
-myProfile = 'local';
+myProfile = 'Amazon_Trail';
 myCluster = parcluster(myProfile);
 
 switch myProfile
@@ -37,7 +37,7 @@ switch myProfile
         
         allFiles = [classNames, funcNames];
         
-        parpool(myCluster, 'AttachedFiles', allFiles);
+        parpool(myCluster, 16, 'AttachedFiles', allFiles);
 end
 
 % Initialisieren eines neuen Taksmanagers

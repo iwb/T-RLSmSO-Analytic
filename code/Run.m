@@ -10,12 +10,16 @@ addpath('.\Klassen');
 addpath('.\TopLevelFunctions');
 
 % Auswahl des Clusters
-myProfile = 'Amazon_Trail';
+%myProfile = 'Amazon_Trail';
+myProfile = 'local';
 myCluster = parcluster(myProfile);
+
+% Auslesen der verfügbaren worker
+numWorkers = myCluster.NumWorkers;
 
 switch myProfile
     case 'local'
-        parpool(myCluster);
+        parpool(myCluster, numWorkers);
     otherwise
         % Pfade angeben für Cloud Computing
         classes = dir('.\Klassen');
@@ -37,7 +41,7 @@ switch myProfile
         
         allFiles = [classNames, funcNames];
         
-        parpool(myCluster, 16, 'AttachedFiles', allFiles);
+        parpool(myCluster, numWorkers, 'AttachedFiles', allFiles);
 end
 
 % Initialisieren eines neuen Taksmanagers

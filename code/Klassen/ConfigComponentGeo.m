@@ -7,11 +7,13 @@ classdef ConfigComponentGeo < handle
         Dy = 0.04e-3;   %Örtliche Diskretisierung in y-Richtung [m]
         Dz = 0.03e-3;   %Örtliche Diskretisierung in z-Richtung [m]
         
-        L = 4e-3;       %Länge des Bauteils (x-Richtung) [m]
-        B = 3e-3;       %Breite des Bauteils (y-Richtung) [m]
-        D = 2e-3;       %Dicke des Bauteils (z-Richtung) [m]
+        Xstart = 0e-3;
+        Ystart = 0e-3;
+        Zstart = 0e-3;
         
-        startD = 0;     %Für einzelne z-Schicht
+        Xend = 4e-3;       %Länge des Bauteils (x-Richtung) [m]
+        Yend = 3e-3;       %Breite des Bauteils (y-Richtung) [m]
+        Zend = 2e-3;       %Dicke des Bauteils (z-Richtung) [m]
     end
     
     properties (Dependent = true)
@@ -23,10 +25,16 @@ classdef ConfigComponentGeo < handle
         end
         
         function fieldGrid = get.FieldGrid(this)
+            % Test ob *end > *start
+            if this.Xstart > this.Xend || this.Ystart > this.Yend || this.Zstart > this.Zend
+                warning('Work piece definition might be wrong. Please check again!');
+                createLog('\nWork piece definition might be wrong. Please check again!\n', 'a');
+            end
+            
             % Diskretisierung der Abmessungen als Vektoren [m]
-            fieldGrid.X = 0:this.Dx:this.L;
-            fieldGrid.Y = 0:this.Dy:this.B;
-            fieldGrid.Z = this.startD:this.Dz:this.D;
+            fieldGrid.X = this.Xstart:this.Dx:this.Xend;
+            fieldGrid.Y = this.Ystart:this.Dy:this.Yend;
+            fieldGrid.Z = this.Zstart:this.Dz:this.Zend;
             
             if isempty(fieldGrid.Z)
                 fieldGrid.Z = 0;

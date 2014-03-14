@@ -50,19 +50,19 @@ classdef CalcTrajectory < handle
                 abs(min(this.WeldingTrajectory.Y));
             
             % Verschieben in die Mitte des Bauteils falls dies groß genug ist
-            if this.Config.ComponentGeo.L > max(this.WeldingTrajectory.X) && this.Config.ComponentGeo.B > max(this.WeldingTrajectory.Y)
+            if (this.Config.ComponentGeo.Xend-this.Config.ComponentGeo.Xstart) > (max(this.WeldingTrajectory.X)-min(this.WeldingTrajectory.X)) && (this.Config.ComponentGeo.Yend-this.Config.ComponentGeo.Ystart) > (max(this.WeldingTrajectory.Y)-min(this.WeldingTrajectory.Y))
                 disX = max(this.WeldingTrajectory.X);
-                this.WeldingTrajectory.X = this.WeldingTrajectory.X + (this.Config.ComponentGeo.L - disX)/2;
+                this.WeldingTrajectory.X = this.WeldingTrajectory.X + ((this.Config.ComponentGeo.Xend - disX + this.Config.ComponentGeo.Xstart)/2);
                 disY = max(this.WeldingTrajectory.Y);
-                this.WeldingTrajectory.Y = this.WeldingTrajectory.Y + (this.Config.ComponentGeo.B - disY)/2;
+                this.WeldingTrajectory.Y = this.WeldingTrajectory.Y + ((this.Config.ComponentGeo.Yend - disY + this.Config.ComponentGeo.Ystart)/2);
             else
                 warning('work piece is too small for selected trajectory.');
                 createLog('\nwork piece is too small for selected trajectory.\n', 'a');
                 
                 disX = max(this.WeldingTrajectory.X);
-                this.WeldingTrajectory.X = this.WeldingTrajectory.X + (this.Config.ComponentGeo.L - disX)/2;
+                this.WeldingTrajectory.X = this.WeldingTrajectory.X + ((this.Config.ComponentGeo.Xend - disX + this.Config.ComponentGeo.Xstart)/2);
                 disY = max(this.WeldingTrajectory.Y);
-                this.WeldingTrajectory.Y = this.WeldingTrajectory.Y + (this.Config.ComponentGeo.B - disY)/2;
+                this.WeldingTrajectory.Y = this.WeldingTrajectory.Y + ((this.Config.ComponentGeo.Yend - disY + this.Config.ComponentGeo.Ystart)/2);
             end
             
             %% Berechnung der Bahngeschwindigkeiten

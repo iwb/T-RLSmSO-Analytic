@@ -47,8 +47,8 @@ end
 % Initialisieren eines neuen Taksmanagers
 % Begin der Simulation
 try
-    assignment = TaskManager('..\Einstellungen\SettingsAmazonCloud.mat', '..\storage\logfile.txt');
-    assignment.RunTask('last', 'osci');    
+    assignment = TaskManager('..\Einstellungen\EinstellungenSimple.mat', '..\storage\logfile.txt');
+    assignment.RunTask('last', 'osci');
     
     save('..\storage\CloudTest', 'assignment');
 catch err

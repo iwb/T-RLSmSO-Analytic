@@ -128,7 +128,6 @@ classdef TaskManager < handle
             osci = this.InputOscillation;
             
             nOscillations = 3.5;
-            nElements = 50000;
             
             % Erstellen der benötigten Config-Objekte
             configObjects = cell(1, size(vari, 1));
@@ -160,13 +159,17 @@ classdef TaskManager < handle
                 configObjects{i}.Material.VaporTemperature = mat(i, 7);
                 configObjects{i}.Material.AmbientTemperature = mat(i, 8);
                 
-                configObjects{i}.ComponentGeo.L = ((nOscillations*vari(i, 3))/vari(i, 2))+4*vari(i, 1);
-                configObjects{i}.ComponentGeo.B = (5*vari(i, 1))+0.5e-3;
-                configObjects{i}.ComponentGeo.D = comp(i, 3);
+                configObjects{i}.ComponentGeo.Xstart = comp(i, 1);           %((nOscillations*vari(i, 3))/vari(i, 2))+4*vari(i, 1);
+                configObjects{i}.ComponentGeo.Ystart = comp(i, 2);           %(5*vari(i, 1))+0.5e-3;
+                configObjects{i}.ComponentGeo.Zstart = comp(i, 3);
                 
-                configObjects{i}.ComponentGeo.Dx = configObjects{i}.ComponentGeo.L/nthroot(nElements,3);
-                configObjects{i}.ComponentGeo.Dy = configObjects{i}.ComponentGeo.B/nthroot(nElements,3);
-                configObjects{i}.ComponentGeo.Dz = configObjects{i}.ComponentGeo.D/nthroot(nElements,3);
+                configObjects{i}.ComponentGeo.Dx = comp(i, 4);               %configObjects{i}.ComponentGeo.L/nthroot(nElements,3);
+                configObjects{i}.ComponentGeo.Dy = comp(i, 5);               %configObjects{i}.ComponentGeo.B/nthroot(nElements,3);
+                configObjects{i}.ComponentGeo.Dz = comp(i, 6);               %configObjects{i}.ComponentGeo.D/nthroot(nElements,3);
+                
+                configObjects{i}.ComponentGeo.Xend = comp(i, 7);
+                configObjects{i}.ComponentGeo.Yend = comp(i, 8);
+                configObjects{i}.ComponentGeo.Zend = comp(i, 9);
                 
                 configObjects{i}.WeldingParameter.WaveLength = weld(i, 1);
                 configObjects{i}.WeldingParameter.WaistSize = weld(i, 2);

@@ -58,6 +58,6 @@ end
 
 matlabpool close
 
-% appointment = TaskManager('..\Einstellungen\Findfmin.mat', '..\storage\logfile.txt');
-% appointment.Findfmin(1e-3, [200 2000]);
+% appointment = TaskManager('..\Einstellungen\EinstellungenSimple.xlsx', '..\storage\logfile.txt');
+% appointment.Findfmin(3, [200 2000]);
 

@@ -120,6 +120,10 @@ classdef TaskManager < handle
                 error('no idea what you did but it is not allowed...try again :-).');
             end
             
+            if isempty(timeStep{1})
+                error('the keyword "last" must be chosen.');
+            end
+            
             % Übertragen in lokale Variablen
             vari = this.InputVariParam;
             mat = this.InputMaterial;
@@ -127,7 +131,7 @@ classdef TaskManager < handle
             weld = this.InputWelding;
             osci = this.InputOscillation;
             
-            nOscillations = 3.5;
+            nOscillations = osci(:, 3);
             
             % Erstellen der benötigten Config-Objekte
             configObjects = cell(1, size(vari, 1));
@@ -147,7 +151,7 @@ classdef TaskManager < handle
                 
                 configObjects{i}.WeldingParameter.Fokus = vari(i, 5);
                 
-                configObjects{i}.Oscillation.SeamLength = (nOscillations*vari(i, 3))/vari(i, 2);
+                configObjects{i}.Oscillation.SeamLength = (nOscillations(i)*vari(i, 3))/vari(i, 2);
                 configObjects{i}.Oscillation.Discretization = osci(i, 2);
                 
                 configObjects{i}.Material.ThermalConductivity = mat(i, 1);
@@ -159,13 +163,13 @@ classdef TaskManager < handle
                 configObjects{i}.Material.VaporTemperature = mat(i, 7);
                 configObjects{i}.Material.AmbientTemperature = mat(i, 8);
                 
-                configObjects{i}.ComponentGeo.Xstart = comp(i, 1);           %((nOscillations*vari(i, 3))/vari(i, 2))+4*vari(i, 1);
-                configObjects{i}.ComponentGeo.Ystart = comp(i, 2);           %(5*vari(i, 1))+0.5e-3;
+                configObjects{i}.ComponentGeo.Xstart = comp(i, 1);
+                configObjects{i}.ComponentGeo.Ystart = comp(i, 2);
                 configObjects{i}.ComponentGeo.Zstart = comp(i, 3);
                 
-                configObjects{i}.ComponentGeo.Dx = comp(i, 4);               %configObjects{i}.ComponentGeo.L/nthroot(nElements,3);
-                configObjects{i}.ComponentGeo.Dy = comp(i, 5);               %configObjects{i}.ComponentGeo.B/nthroot(nElements,3);
-                configObjects{i}.ComponentGeo.Dz = comp(i, 6);               %configObjects{i}.ComponentGeo.D/nthroot(nElements,3);
+                configObjects{i}.ComponentGeo.Dx = comp(i, 4);
+                configObjects{i}.ComponentGeo.Dy = comp(i, 5);
+                configObjects{i}.ComponentGeo.Dz = comp(i, 6);
                 
                 configObjects{i}.ComponentGeo.Xend = comp(i, 7);
                 configObjects{i}.ComponentGeo.Yend = comp(i, 8);
@@ -317,16 +321,15 @@ classdef TaskManager < handle
             
         end
         %% Minimale Frequenz
-        function Findfmin(this, zlayer, freqBound)            
+        function Findfmin(this, anzIter, freqBound)            
             % Übertragen in lokale Variablen
             vari = this.InputVariParam;
             mat = this.InputMaterial;
+            comp = this.InputComponent;
             weld = this.InputWelding;
             osci = this.InputOscillation;
 			
-			anzIter = 3;
-            nOscillations = 50;
-            nElements = 4000;
+            nOscillations = osci(:, 3);
             
             % Anzeige
             fprintf('Es werden %d Simulationen durchgeführt.\n', size(vari, 1));
@@ -365,7 +368,7 @@ classdef TaskManager < handle
                 
                 configObjects{i}.WeldingParameter.Fokus = vari(i, 5);
                 
-                configObjects{i}.Oscillation.SeamLength = (nOscillations*vari(i, 3))/freqBound(1);
+                configObjects{i}.Oscillation.SeamLength = (nOscillations(i)*vari(i, 3))/freqBound(1);
                 configObjects{i}.Oscillation.Discretization = osci(i, 2);
                 
                 configObjects{i}.Material.ThermalConductivity = mat(i, 1);
@@ -377,17 +380,17 @@ classdef TaskManager < handle
                 configObjects{i}.Material.VaporTemperature = mat(i, 7);
                 configObjects{i}.Material.AmbientTemperature = mat(i, 8);
                 
-                configObjects{i}.ComponentGeo.L = ((nOscillations*vari(i, 3))/freqBound(1))+2.5*vari(i, 1);
-                configObjects{i}.ComponentGeo.B = (3.5*vari(i, 1))+0.5e-3;
-                configObjects{i}.ComponentGeo.D = zlayer;
+                configObjects{i}.ComponentGeo.Xstart = comp(i, 1);
+                configObjects{i}.ComponentGeo.Ystart = comp(i, 2);
+                configObjects{i}.ComponentGeo.Zstart = comp(i, 3);
                 
-                anzX = floor(sqrt(nElements/(configObjects{i}.ComponentGeo.B/configObjects{i}.ComponentGeo.L)));
-                anzY = anzX * (configObjects{i}.ComponentGeo.B/configObjects{i}.ComponentGeo.L);
+                configObjects{i}.ComponentGeo.Dx = comp(i, 4);
+                configObjects{i}.ComponentGeo.Dy = comp(i, 5);
+                configObjects{i}.ComponentGeo.Dz = comp(i, 6);
                 
-                configObjects{i}.ComponentGeo.Dx = configObjects{i}.ComponentGeo.L/anzX;
-                configObjects{i}.ComponentGeo.Dy = configObjects{i}.ComponentGeo.B/anzY;
-                configObjects{i}.ComponentGeo.Dz = zlayer;
-                configObjects{i}.ComponentGeo.startD = zlayer;
+                configObjects{i}.ComponentGeo.Xend = comp(i, 7);
+                configObjects{i}.ComponentGeo.Yend = comp(i, 8);
+                configObjects{i}.ComponentGeo.Zend = comp(i, 9);
                 
                 configObjects{i}.WeldingParameter.WaveLength = weld(i, 1);
                 configObjects{i}.WeldingParameter.WaistSize = weld(i, 2);
@@ -435,7 +438,7 @@ classdef TaskManager < handle
 						configObjects{i}.Oscillation.FrequencyY = this.Fpattern{i}.points(ii,iii);
 						
 						% Anpassen der Schweißnahtlänge auf neue Frequenz
-						configObjects{i}.Oscillation.SeamLength = (nOscillations*configObjects{i}.Oscillation.Velocity)/this.Fpattern{i}.points(ii,iii);
+						configObjects{i}.Oscillation.SeamLength = (nOscillations(i)*configObjects{i}.Oscillation.Velocity)/this.Fpattern{i}.points(ii,iii);
 						
 						% Berechnung aller Zeitschritte
 						timeStep = cell(1,2);

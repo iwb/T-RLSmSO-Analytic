@@ -3,13 +3,13 @@ classdef ConfigComponentGeo < handle
     %   Detailed explanation goes here
     
     properties
-        Dx = 0.05e-3;   %Örtliche Diskretisierung in x-Richtung [m]
-        Dy = 0.04e-3;   %Örtliche Diskretisierung in y-Richtung [m]
-        Dz = 0.03e-3;   %Örtliche Diskretisierung in z-Richtung [m]
-        
         Xstart = 0e-3;
         Ystart = 0e-3;
         Zstart = 0e-3;
+        
+        Dx = 0.05e-3;   %Örtliche Diskretisierung in x-Richtung [m]
+        Dy = 0.04e-3;   %Örtliche Diskretisierung in y-Richtung [m]
+        Dz = 0.03e-3;   %Örtliche Diskretisierung in z-Richtung [m]
         
         Xend = 4e-3;       %Länge des Bauteils (x-Richtung) [m]
         Yend = 3e-3;       %Breite des Bauteils (y-Richtung) [m]

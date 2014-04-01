@@ -12,7 +12,7 @@ classdef AbstractHeatSource < handle
             'VeloNorm', [], ...               %v_res:    reslutierende Geschwindigkeit [m/s]
             'Position', []), ...          %p_s:      3 x 1 Vektor der Startkoordinaten der WQ [m]
             ...
-            'ActivationTime', [], ...            %Zeitpunkt an dem Simulation begonnen wird [s]
+            'ActivationTime', [], ...            %Zeitdauer in der WQ/WS aktiv ist [s]
             'HeatEmission', [], ...           %q Wärmeleistung der WQ [W]
             'Type', [] ...                    %Typ der WQ [ WQ | WS | SpWQ | SpWS ]
             );

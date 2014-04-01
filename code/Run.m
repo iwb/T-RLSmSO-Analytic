@@ -47,10 +47,10 @@ end
 % Initialisieren eines neuen Taksmanagers
 % Begin der Simulation
 try
-    assignment = TaskManager('..\Einstellungen\EinstellungenSimple.mat', '..\storage\logfile.txt');
+    assignment = TaskManager('..\Einstellungen\EinstellungenSimple.xlsx', '..\storage\logfile.txt');
     assignment.RunTask('last', 'osci');
     
-    save('..\storage\CloudTest', 'assignment');
+    save('..\storage\MeshTest', 'assignment');
 catch err
     tweet('Achtung Simulation ist abgebrochen!');
     rethrow(err)

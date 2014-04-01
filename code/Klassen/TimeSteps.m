@@ -27,8 +27,6 @@ classdef TimeSteps < handle
                     error('Max number of time steps was exceeded. Only %d allowed', length(this.WQTraj.HeatSourceField)-1);
                 elseif min(timeSteps) <= 0
                     error('Only positiv values are allowed for time steps.');
-                elseif sum(diff(timeSteps)) ~= length(diff(timeSteps))
-                    error('Time steps must be evenly spaced.');
                 else
                     this.TimeStepArray = timeSteps;
                 end
@@ -79,12 +77,17 @@ classdef TimeSteps < handle
                 copyConfig.Material.VaporTemperature = oriConfig.Material.VaporTemperature;
                 copyConfig.Material.AmbientTemperature = oriConfig.Material.AmbientTemperature;
                 
-                copyConfig.ComponentGeo.L = oriConfig.ComponentGeo.L;
-                copyConfig.ComponentGeo.B = oriConfig.ComponentGeo.B;
-                copyConfig.ComponentGeo.D = oriConfig.ComponentGeo.D;
+                copyConfig.ComponentGeo.Xstart = oriConfig.ComponentGeo.Xstart;
+                copyConfig.ComponentGeo.Ystart = oriConfig.ComponentGeo.Ystart;
+                copyConfig.ComponentGeo.Zstart = oriConfig.ComponentGeo.Zstart;
+                
                 copyConfig.ComponentGeo.Dx = oriConfig.ComponentGeo.Dx;
                 copyConfig.ComponentGeo.Dy = oriConfig.ComponentGeo.Dy;
                 copyConfig.ComponentGeo.Dz = oriConfig.ComponentGeo.Dz;
+                
+                copyConfig.ComponentGeo.Xend = oriConfig.ComponentGeo.Xend;
+                copyConfig.ComponentGeo.Yend = oriConfig.ComponentGeo.Yend;
+                copyConfig.ComponentGeo.Zend = oriConfig.ComponentGeo.Zend;
                 
                 copyConfig.WeldingParameter.WaveLength = oriConfig.WeldingParameter.WaveLength;
                 copyConfig.WeldingParameter.WaistSize = oriConfig.WeldingParameter.WaistSize;

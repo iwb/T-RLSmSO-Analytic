@@ -6,8 +6,6 @@ classdef CalcTrajectory < handle
         WeldingTrajectory = struct; %Enthält die Schweißtrajektorie
         
         ComponentMesh = [];         %Enthält das Netz auf die Wärmequelle bewegt bzw. ausgewertet wird
-        
-        DebugPlot = struct();
     end
     
     properties

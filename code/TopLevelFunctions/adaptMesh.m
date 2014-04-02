@@ -9,28 +9,76 @@ function [newCompMesh, meshDisk] = adaptMesh( PosWQ, L, B, T )
 nx = length(L);
 ny = length(B);
 
+% Länge des linearen zwischen Abschnittes
+nlinX = floor(nx/10);
+nlinY = floor(ny/10);
+
 % Berechnung der gesamt Steigung in x und y
 sx = (max(L) - min(L)) ./ nx;
 sy = (max(B) - min(B)) ./ ny;
+
+% Berechnung der linearen Steigung
+slinX = 0.15*sx;
+slinY = 0.15*sy;
 
 % Umrechnung von PosWQ in nWQ
 nWQx = (PosWQ(1) ./ max(L)).*(nx+1);
 nWQy = (PosWQ(2) ./ max(B)).*(ny+1);
 
-ccX = [0, 0, 0, 0, 1; ...
-       nx^4, nx^3, nx^2, nx, 1; ...
-       4*nWQx^3, 3*nWQx^2, 2*nWQx, 1, 0; ...
-       nWQx^4, nWQx^3, nWQx^2, nWQx, 1; ...
-       12*nWQx^2, 6*nWQx, 2, 0, 0] \ [min(L); max(L); sx*0.15; PosWQ(1); 0];
-   
-ccY = [0, 0, 0, 0, 1; ...
-       ny^4, ny^3, ny^2, ny, 1; ...
-       4*nWQy^3, 3*nWQy^2, 2*nWQy, 1, 0; ...
-       nWQy^4, nWQy^3, nWQy^2, nWQy, 1; ...
-       12*nWQy^2, 6*nWQy, 2, 0, 0] \ [min(B); max(B); sy*0.15; PosWQ(2); 0];
+% Berechnung der Hilfspunkte (Endpunkte des linearen Abschnittes)
+%Elementzahl
+nlinPosX(1) = ceil(nWQx - nlinX/2);
+nlinPosX(2) = ceil(nWQx + nlinX/2);
 
-xgridFinal = polyval(ccX, 0:1:nx);
-ygridFinal = polyval(ccY, 0:1:ny);
+nlinPosY(1) = ceil(nWQy - nlinY/2);
+nlinPosY(2) = ceil(nWQy + nlinY/2);
+
+%Metrische Einheit
+linPosX(1) = PosWQ(1) - (nlinX/2 * slinX);
+linPosX(2) = PosWQ(1) + (nlinX/2 * slinX);
+
+linPosY(1) = PosWQ(2) - (nlinY/2 * slinY);
+linPosY(2) = PosWQ(2) + (nlinY/2 * slinY);
+
+% X-Koordinate
+%Quadratischen Spline anpassen an Hilfspunkt 1
+ccX1 = [0,              0,              1;
+        nlinPosX(1)^2,  nlinPosX(1),    1;
+        2*nlinPosX(1),  1,              0] \ [L(1); linPosX(1); slinX];
+
+xgrid_start = polyval(ccX1, 0:1:nlinPosX(1));
+xgrid_middle = (linPosX(1) + slinX):slinX:(linPosX(2) - slinX);
+
+%Quadratischen Spline anpassen an Hilfspunkt 2
+ccX2 = [nx^2,           nx,             1;
+        nlinPosX(2)^2,  nlinPosX(2),    1;
+        2*nlinPosX(2),  1,              0] \ [L(end); linPosX(2); slinX];
+
+xgrid_end = polyval(ccX2, nlinPosX(2):1:nx);
+
+%Zusammensetzen der drei Abschnitte
+xgridFinal = [xgrid_start, xgrid_middle, xgrid_end];
+
+
+% Y-Koordinate
+%Quadratischen Spline anpassen an Hilfspunkt 1
+ccY1 = [0,              0,              1;
+        nlinPosY(1)^2,  nlinPosY(1),    1;
+        2*nlinPosY(1),  1,              0] \ [B(1); linPosY(1); slinY];
+
+ygrid_start = polyval(ccY1, 0:1:nlinPosY(1));
+ygrid_middle = (linPosY(1) + slinY):slinY:(linPosY(2) - slinY);
+
+%Quadratischen Spline anpassen an Hilfspunkt 2
+ccY2 = [ny^2,           ny,             1;
+        nlinPosY(2)^2,  nlinPosY(2),    1;
+        2*nlinPosY(2),  1,              0] \ [B(end); linPosY(2); slinY];
+
+ygrid_end = polyval(ccY2, nlinPosY(2):1:ny);
+
+%Zusammensetzen der drei Abschnitte
+ygridFinal = [ygrid_start, ygrid_middle, ygrid_end];
+
 
 % Diskretisierung in z-Richtung
 zgridFinal = T;

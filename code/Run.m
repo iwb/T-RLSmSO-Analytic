@@ -48,7 +48,7 @@ end
 % Begin der Simulation
 try
     assignment = TaskManager('..\Einstellungen\EinstellungenSimple.xlsx', '..\storage\logfile.txt');
-    assignment.RunTask([1,6]);
+    assignment.RunTask('last', 'osci');
     
     save('..\storage\MeshTest', 'assignment');
 catch err

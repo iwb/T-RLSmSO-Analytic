@@ -761,7 +761,7 @@ classdef TaskManager < handle
                 doubleEllipSolverObj = DoubleEllipSolver(doubleEllipHSObj);
                 
                 tfieldticID = tic;
-                doubleEllipSolverObj.RunSolver('seq');
+                doubleEllipSolverObj.RunSolver('par');
                 this.ElapsedTime.TField{simCount, varargin{1}} = toc(tfieldticID);
                 
                 %Rückgabe

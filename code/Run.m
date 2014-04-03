@@ -19,7 +19,7 @@ numWorkers = myCluster.NumWorkers;
 
 switch myProfile
     case 'local'
-        %parpool(myCluster, numWorkers);
+        parpool(myCluster, numWorkers);
     otherwise
         % Pfade angeben für Cloud Computing
         classes = dir('.\Klassen');

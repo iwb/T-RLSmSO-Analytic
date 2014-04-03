@@ -138,7 +138,7 @@ classdef TimeSteps < handle
                 
                 % Solver Objekte erstellen
                 wqTrajSolver = DoubleEllipSolver(wqTrajCopies{i});
-                wqTrajSolver.RunSolver('seq');
+                wqTrajSolver.RunSolver('par');
                 
                 twitterTime = toc(ticID);
                 

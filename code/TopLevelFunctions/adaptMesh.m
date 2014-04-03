@@ -28,10 +28,25 @@ nWQy = (PosWQ(2) ./ max(B)).*(ny+1);
 % Berechnung der Hilfspunkte (Endpunkte des linearen Abschnittes)
 %Elementzahl
 nlinPosX(1) = ceil(nWQx - nlinX/2);
-nlinPosX(2) = ceil(nWQx + nlinX/2);
+nlinPosX(2) = floor(nWQx + nlinX/2);
 
 nlinPosY(1) = ceil(nWQy - nlinY/2);
-nlinPosY(2) = ceil(nWQy + nlinY/2);
+nlinPosY(2) = floor(nWQy + nlinY/2);
+
+%Hilfspunkte dürfen nicht am Rand liegen
+if nlinPosX(1) == 1
+    nlinPosX(1) = nlinPosX(1) + 2;
+end
+if nlinPosX(2) == length(L)
+    nlinPosX(2) = nlinPosX(2) - 2;
+end
+
+if nlinPosY(1) == 1
+    nlinPosY(1) = nlinPosY(1) + 2;
+end
+if nlinPosY(2) == length(B)
+    nlinPosY(2) = nlinPosY(2) - 2;
+end
 
 %Metrische Einheit
 linPosX(1) = PosWQ(1) - (nlinX/2 * slinX);

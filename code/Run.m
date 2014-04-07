@@ -50,7 +50,7 @@ try
     assignment = TaskManager('..\Einstellungen\EinstellungenSimple.xlsx', '..\storage\logfile.txt');
     assignment.RunTask('last', 'osci');
     
-    save('..\storage\MeshTest', 'assignment');
+    save('..\results\MeshTest.mat', 'assignment');
 catch err
     tweet('Achtung Simulation ist abgebrochen!');
     rethrow(err)

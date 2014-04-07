@@ -37,14 +37,14 @@ nlinPosY(2) = floor(nWQy + nlinY/2);
 if nlinPosX(1) == 1
     nlinPosX(1) = nlinPosX(1) + 2;
 end
-if nlinPosX(2) == length(L)
+if nlinPosX(2) >= length(L)
     nlinPosX(2) = nlinPosX(2) - 2;
 end
 
 if nlinPosY(1) == 1
     nlinPosY(1) = nlinPosY(1) + 2;
 end
-if nlinPosY(2) == length(B)
+if nlinPosY(2) >= length(B)
     nlinPosY(2) = nlinPosY(2) - 2;
 end
 

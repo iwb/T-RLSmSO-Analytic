@@ -29,6 +29,7 @@ classdef AbstractSolver < handle
             componentMesh = [componentMesh, ones(size(componentMesh, 1),1)];
             
             ambientTemp = this.HeatSourceDefinition.TrajectoryInfo.Config.Material.AmbientTemperature;
+            vaporTemp = this.HeatSourceDefinition.TrajectoryInfo.Config.Material.VaporTemperature;
             
             % Initialisieren des Temperaturfeldes
             this.TemperatureField = zeros(size(componentMesh, 1), 1);
@@ -108,7 +109,10 @@ classdef AbstractSolver < handle
             tempTemperatureField(:,end) = sum(tempTemperatureField, 2);
             tempTemperatureField(:,end) = tempTemperatureField(:,end) + ambientTemp;
             
-            this.TemperatureField = tempTemperatureField(:,end);
+            tempTemperatureField_cut = tempTemperatureField(:,end);
+            tempTemperatureField_cut(tempTemperatureField_cut > vaporTemp) = vaporTemp;
+            
+            this.TemperatureField = tempTemperatureField_cut;
         end
     end
     

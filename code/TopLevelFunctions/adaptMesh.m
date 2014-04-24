@@ -33,19 +33,27 @@ nlinPosX(2) = floor(nWQx + nlinX/2);
 nlinPosY(1) = ceil(nWQy - nlinY/2);
 nlinPosY(2) = floor(nWQy + nlinY/2);
 
-%Hilfspunkte dürfen nicht am Rand liegen
-if nlinPosX(1) == 1
-    nlinPosX(1) = nlinPosX(1) + 2;
+%Hilfspunkte dürfen nicht zu nahe am Rand liegen
+if nlinPosX(1) < 4
+    nlinPosX(1) = 4;
 end
-if nlinPosX(2) >= length(L)
-    nlinPosX(2) = nlinPosX(2) - 2;
+if nlinPosX(2) > (length(L) - 4)
+    nlinPosX(2) = length(L) - 4;
 end
 
-if nlinPosY(1) == 1
-    nlinPosY(1) = nlinPosY(1) + 2;
+if nlinPosY(1) < 4
+    nlinPosY(1) = 4;
 end
-if nlinPosY(2) >= length(B)
-    nlinPosY(2) = nlinPosY(2) - 2;
+if nlinPosY(2) > (length(B) - 4)
+    nlinPosY(2) = length(B) - 4;
+end
+
+%Hilfspunkte müssen richtige Reihenfolge besitzen
+if nlinPosX(1) > nlinPosX(2)
+    nlinPosX(1) = nlinPosX(2);  %Es existiert kein geradliniges Teilstück
+end
+if nlinPosY(1) > nlinPosY(2)
+    nlinPosY(1) = nlinPosY(2);  %Es existiert kein geradliniges Teilstück
 end
 
 %Metrische Einheit

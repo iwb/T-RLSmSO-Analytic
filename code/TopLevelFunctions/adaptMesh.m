@@ -14,16 +14,16 @@ nlinX = floor(nx/10);
 nlinY = floor(ny/10);
 
 % Berechnung der gesamt Steigung in x und y
-sx = (max(L) - min(L)) ./ nx;
-sy = (max(B) - min(B)) ./ ny;
+sx = (L(end) - L(1)) ./ nx;
+sy = (B(end) - B(1)) ./ ny;
 
 % Berechnung der linearen Steigung
 slinX = 0.15*sx;
 slinY = 0.15*sy;
 
 % Umrechnung von PosWQ in nWQ
-nWQx = (PosWQ(1) ./ max(L)).*(nx+1);
-nWQy = (PosWQ(2) ./ max(B)).*(ny+1);
+nWQx = (PosWQ(1) ./ L(end)).*(nx+1);
+nWQy = (PosWQ(2) ./ B(end)).*(ny+1);
 
 % Berechnung der Hilfspunkte (Endpunkte des linearen Abschnittes)
 %Elementzahl
@@ -57,11 +57,11 @@ if nlinPosY(1) > nlinPosY(2)
 end
 
 %Metrische Einheit
-linPosX(1) = PosWQ(1) - (nlinX/2 * slinX);
-linPosX(2) = PosWQ(1) + (nlinX/2 * slinX);
+linPosX(1) = (nlinPosX(1) / (nx+1)) * L(end); %PosWQ(1) - (nlinX/2 * slinX);
+linPosX(2) = (nlinPosX(2) / (nx+1)) * L(end); %PosWQ(1) + (nlinX/2 * slinX);
 
-linPosY(1) = PosWQ(2) - (nlinY/2 * slinY);
-linPosY(2) = PosWQ(2) + (nlinY/2 * slinY);
+linPosY(1) = (nlinPosY(1) / (ny+1)) * B(end); %PosWQ(2) - (nlinY/2 * slinY);
+linPosY(2) = (nlinPosY(2) / (ny+1)) * B(end); %PosWQ(2) + (nlinY/2 * slinY);
 
 % X-Koordinate
 %Quadratischen Spline anpassen an Hilfspunkt 1

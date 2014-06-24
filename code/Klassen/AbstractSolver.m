@@ -71,11 +71,18 @@ classdef AbstractSolver < handle
                             gamma = gamma - 2*pi;
                         end
                         
-                        transMesh = (componentMesh * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))') * (rotateZ(this, -gamma)');
+                        transMesh = (componentMesh * rotateZ(this, gamma)') * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))';
+                        % old implementation --> transMesh = (componentMesh * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))') * (rotateZ(this, -gamma)');
                         
                         % Berechnung des Temperaturfeldes für jede Wärmequelle
-                        tempTemperatureField(:,i) = HeatSourceIntegration(this, transMesh, i);
+                        tempTemperatureField(:,i) = HeatSourceIntegration(this, transMesh, i);                       
                     end
+                    % Speichern der ersten beiden T-Felder 
+                    saveTField1 = tempTemperatureField(:,1); %#ok
+                    saveTField2 = tempTemperatureField(:,2); %#ok
+                    save('../results/TFieldStep_1.mat', 'saveTField1');
+                    save('../results/TFieldStep_2.mat', 'saveTField2');
+                    
                 case 'seq'
                     n = 0;
                     for i = 1:N
@@ -91,10 +98,17 @@ classdef AbstractSolver < handle
                             gamma = gamma - 2*pi;
                         end
                         
-                        transMesh = (componentMesh * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))') * (rotateZ(this, -gamma)');
+                        transMesh = (componentMesh * rotateZ(this, gamma)') * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))';
+                        % old implementation --> transMesh = (componentMesh * translateMat(this, -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(1,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(2,1), -this.HeatSourceDefinition.HeatSourceField{i,1}.TrajectoryData.Position(3,1))') * (rotateZ(this, -gamma)');
                         
                         % Berechnung des Temperaturfeldes für jede Wärmequelle
                         tempTemperatureField(:,i) = HeatSourceIntegration(this, transMesh, i);
+                        
+                        % Speichern der ersten beiden T-Felder
+                        if i == 1 || i == 2
+                            saveTField = tempTemperatureField(:,i); %#ok
+                            save(['../results/TFieldStep_' int2str(i) '.mat'], 'saveTField');
+                        end
                         
                         % Anzeige
                         message = sprintf('Wärmequelle %d/%d berechnet.\n', i, N);

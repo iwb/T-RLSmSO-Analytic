@@ -80,7 +80,11 @@ ccX2 = [nx^2,           nx,             1;
 xgrid_end = polyval(ccX2, nlinPosX(2):1:nx);
 
 %Zusammensetzen der drei Abschnitte
-xgridFinal = [xgrid_start, xgrid_middle, xgrid_end];
+if isempty(xgrid_start) || isempty(xgrid_middle) || isempty(xgrid_end)
+    xgridFinal = L;
+else
+    xgridFinal = [xgrid_start, xgrid_middle, xgrid_end];
+end
 
 
 % Y-Koordinate
@@ -100,7 +104,11 @@ ccY2 = [ny^2,           ny,             1;
 ygrid_end = polyval(ccY2, nlinPosY(2):1:ny);
 
 %Zusammensetzen der drei Abschnitte
-ygridFinal = [ygrid_start, ygrid_middle, ygrid_end];
+if isempty(ygrid_start) || isempty(ygrid_middle) || isempty(ygrid_end)
+    ygridFinal = B;
+else
+    ygridFinal = [ygrid_start, ygrid_middle, ygrid_end];
+end
 
 
 % Diskretisierung in z-Richtung
